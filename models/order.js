@@ -19,6 +19,10 @@ const orderSchema = new Schema({
     type: String,
     required: true,
   },
+  takeAwayTime: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model('Order', orderSchema);

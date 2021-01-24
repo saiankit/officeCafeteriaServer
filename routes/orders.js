@@ -11,6 +11,7 @@ router.post('/save', (req, res) => {
     orderProducts: req.body.orderProducts,
     registrationId: req.body.registrationId,
     orderId: regId(),
+    takeAwayTime: req.body.takeAwayTime,
   });
   res.status(201).send(order);
   order.save();
