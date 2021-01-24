@@ -1,7 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const fs = require('fs');
 
 require('dotenv').config();
 const User = require('../models/user.js');
@@ -48,19 +47,6 @@ router.post('/register', (req, res) => {
   });
 });
 
-router.get('/me', (req, res) => {
-  const token = req.headers['x-access-token'];
-  if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
-  jwt.verify(token, jwtSecret, (err, decoded) => {
-    if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
-    User.findById(decoded.id, (error, user) => {
-      if (error) return res.send(err);
-      return res.send(user);
-    });
-    // res.status(200).send(decoded);
-  });
-});
-
 router.post('/login', (req, res) => {
   User.findOne({ email: req.body.email }, (err, user) => {
     if (err) return res.status(500).send('Error on the server.');
@@ -70,6 +56,7 @@ router.post('/login', (req, res) => {
     const jwtpayload = {
       id: user.id,
       name: user.name,
+      registrationId: user.registrationId,
     };
     const token = jwt.sign(jwtpayload, jwtSecret);
     const { registrationID } = user;
@@ -78,6 +65,18 @@ router.post('/login', (req, res) => {
       registrationID,
     };
     res.status(201).send(response);
+  });
+});
+
+router.get('/me', (req, res) => {
+  const token = req.headers['x-access-token'];
+  if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
+  jwt.verify(token, jwtSecret, (err, decoded) => {
+    if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+    User.findById(decoded.id, (error, user) => {
+      if (error) return res.send(err);
+      return res.status(200).send(user);
+    });
   });
 });
 
