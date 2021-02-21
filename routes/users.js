@@ -8,7 +8,7 @@ const regId = require('../middlewares/registrationID');
 
 const jwtSecret = process.env.JWT_SECRET_TOKEN;
 const router = express.Router();
-
+//Sign Up
 router.post('/register', (req, res) => {
   const newUser = User({
     name: req.body.name,
@@ -46,7 +46,7 @@ router.post('/register', (req, res) => {
     });
   });
 });
-
+//Login
 router.post('/login', (req, res) => {
   User.findOne({ email: req.body.email }, (err, user) => {
     if (err) return res.status(500).send('Error on the server.');
@@ -67,7 +67,7 @@ router.post('/login', (req, res) => {
     res.status(201).send(response);
   });
 });
-
+//About
 router.get('/me', (req, res) => {
   const token = req.headers['x-access-token'];
   if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
