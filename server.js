@@ -9,16 +9,10 @@ app.use(bodyParser.json({ limit: '100mb' }));
 app.use(bodyParser.urlencoded({ limit: '100mb', extended: false }));
 production(app);
 const connectDB = require('./config/db.js');
-const usersRoute = require('./routes/users.js');
-const orderRoute = require('./routes/orders.js');
-
-app.use('/uploads', express.static(`${__dirname}/uploads`));
+require('./startup/routes')(app);
 app.get('/', (req, res) => {
   res.send('Hello World');
 });
-
-app.use('/users', usersRoute);
-app.use('/orders', orderRoute);
 
 const PORT = process.env.PORT || 3000;
 connectDB();
