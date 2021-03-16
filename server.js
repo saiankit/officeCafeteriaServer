@@ -10,8 +10,8 @@ app.use(bodyParser.urlencoded({ limit: '100mb', extended: false }));
 production(app);
 const connectDB = require('./config/db.js');
 require('./startup/routes')(app);
-app.get('/', (req, res) => {
-  res.send('Hello World');
+app.get('/ping', (req, res) => {
+  res.send('pong');
 });
 
 const PORT = process.env.PORT || 3000;
